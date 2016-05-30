@@ -20,6 +20,7 @@ def index():
 
     r = plivoxml.Response()
     r.addMessage(body, **params)
+    print r.to_xml()
     return r.to_xml()
 
 
