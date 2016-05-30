@@ -43,6 +43,16 @@ def forward():
     return Response(str(r), mimetype='text/xml')
 
 
+@app.route('/conference', methods=['POST', 'GET'])
+def conference():
+    r = plivoxml.Response()
+    r.addSpeak("Thanks for calling Plivo training!")
+    conferenceName= "Plivo Test Conference"
+    r.addConference(conferenceName)
+    print (r.to_xml())
+    return Response(str(r), mimetype='text/xml')
+
+
 @app.route('/hello')
 def hello():
     return 'Hello, World'
