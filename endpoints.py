@@ -31,6 +31,18 @@ def speak():
     return Response(str(r), mimetype='text/xml')
 
 
+@app.route('/forward', methods=['POST', 'GET'])
+def forward():
+    r = plivoxml.Response()
+    r.addSpeak("Thanks for calling Plivo training!")
+    forwardNumber = "919952899700"
+    d = r.addDial()
+    d.addNumber(forwardNumber)
+    # r.addDial().addNumber(forwardNumber)
+    print (r.to_xml())
+    return Response(str(r), mimetype='text/xml')
+
+
 @app.route('/hello')
 def hello():
     return 'Hello, World'
