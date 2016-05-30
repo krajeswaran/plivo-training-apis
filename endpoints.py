@@ -20,7 +20,14 @@ def index():
 
     r = plivoxml.Response()
     r.addMessage(body, **params)
-    print r.to_xml()
+    return Response(str(r), mimetype='text/xml')
+
+
+@app.route('/speak', methods=['POST', 'GET'])
+def speak():
+    r = plivoxml.Response()
+    r.addSpeak("Thanks for calling!")
+    print (r.to_xml())
     return Response(str(r), mimetype='text/xml')
 
 
