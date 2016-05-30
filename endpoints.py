@@ -3,8 +3,8 @@ import plivoxml, plivo
 
 app = Flask(__name__)
 
-@app.route('/', methods=['POST', 'GET'])
-def index():
+@app.route('/message', methods=['POST', 'GET'])
+def message():
     # Sender's phone number
     from_number = request.values.get('From')
     # Receiver's phone number - Plivo number
@@ -20,6 +20,7 @@ def index():
 
     r = plivoxml.Response()
     r.addMessage(body, **params)
+    print (r.to_xml())
     return Response(str(r), mimetype='text/xml')
 
 
@@ -34,11 +35,9 @@ def speak():
 @app.route('/forward', methods=['POST', 'GET'])
 def forward():
     r = plivoxml.Response()
-    r.addSpeak("Thanks for calling Plivo training!")
+    r.addSpeak("Thanks for calling Plivo training!. Your call is now being forwarded")
     forwardNumber = "919952899700"
-    d = r.addDial()
-    d.addNumber(forwardNumber)
-    # r.addDial().addNumber(forwardNumber)
+    r.addDial().addNumber(forwardNumber)
     print (r.to_xml())
     return Response(str(r), mimetype='text/xml')
 
@@ -46,15 +45,15 @@ def forward():
 @app.route('/conference', methods=['POST', 'GET'])
 def conference():
     r = plivoxml.Response()
-    r.addSpeak("Thanks for calling Plivo training!")
+    r.addSpeak("Thanks for calling Plivo training conference!")
     conferenceName= "Plivo Test Conference"
     r.addConference(conferenceName)
     print (r.to_xml())
     return Response(str(r), mimetype='text/xml')
 
 
-@app.route('/hello')
-def hello():
+@app.route('/')
+def index():
     return 'Hello, World'
 
 if __name__ == "__main__":
