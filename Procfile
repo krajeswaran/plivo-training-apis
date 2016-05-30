@@ -1,1 +1,1 @@
-web: python xml-hoster.py
+web: gunicorn app:app
