@@ -1,10 +1,27 @@
 from flask import Flask, request
+import plivoxml, plivo
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def index():
-    return 'Index Page'
+    # Sender's phone number
+    from_number = request.values.get('From')
+    # Receiver's phone number - Plivo number
+    to_number = request.values.get('To')
+    # The text which was received
+    text = request.values.get('Text')
+
+    params = {
+     "src": to_number,
+     "dst": from_number,
+    }
+    body = "Thanks, we've received your message."
+
+    r = plivoxml.Response()
+    r.addMessage(body, **params)
+    return r.to_xml()
+
 
 @app.route('/hello')
 def hello():
