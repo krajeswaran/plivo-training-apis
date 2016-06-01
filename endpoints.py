@@ -115,9 +115,11 @@ def ivr_next():
     if digit == "1":
         # Read out a text.
         response.addSpeak("You pressed one")
+
     elif digit == "2":
         # Listen to a song
         response.addPlay("https://upload.wikimedia.org/wikipedia/commons/6/6a/04_%D0%B8%D0%BA%D0%BE%D1%81_1.oggvorbis.ogg")
+
     else:
         response.addSpeak("I'm not angry with you, just disappointed!")
 
