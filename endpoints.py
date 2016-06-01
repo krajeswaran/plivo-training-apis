@@ -96,7 +96,7 @@ def ivr_start():
     r = plivoxml.Response()
     getdigits_action_url = url_for('ivr_next', _external=True)
     getDigits = plivoxml.GetDigits(action=getdigits_action_url,
-            method='POST', timeout=7, numDigits=1,
+            method='GET', timeout=7, numDigits=1,
             retries=1, redirect='false')
 
     getDigits.addSpeak("Welcome to Plivo Training IVR")
@@ -110,7 +110,8 @@ def ivr_start():
 @app.route('/ivr/next', methods=['POST', 'GET'])
 def ivr_next():
     response = plivoxml.Response()
-    digit = request.form.get('Digits')
+    digit = request.values.get('Digits')
+    print (digit)
     if digit == "1":
         # Read out a text.
         response.addSpeak("You pressed one")
