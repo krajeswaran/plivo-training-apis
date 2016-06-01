@@ -127,7 +127,7 @@ def ivr_next():
         # call record
         response.addSpeak("Talk to the hand.")
         record_params = { 'action': 'http://requestb.in/15j1zi21', 'maxLength' : '50', 'finishOnKey': '*' }
-        response.addRecord(**params)
+        response.addRecord(**record_params)
         response.addSpeak("You dummy.")
     else:
         response.addSpeak("I'm not angry with you, I'm just disappointed!")
