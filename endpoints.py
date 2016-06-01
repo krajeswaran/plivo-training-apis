@@ -1,7 +1,11 @@
 from flask import Flask, request, Response, url_for
+import os
 import plivoxml, plivo
 
 app = Flask(__name__)
+
+PLIVO_AUTH_ID = os.environ.get('PLIVO_AUTH_ID')
+PLIVO_AUTH_TOKEN = os.environ.get('PLIVO_AUTH_TOKEN')
 
 @app.route('/message', methods=['POST', 'GET'])
 def message():
@@ -56,11 +60,11 @@ def conference():
 def transfer():
     r = plivoxml.Response()
     getdigits_action_url = url_for('transfer_action', _external=True)
-    getDigits = plivoxml.GetDigits(action=getdigits_action_url,
+    get_digits = plivoxml.GetDigits(action=getdigits_action_url,
             method='GET', timeout=7, numDigits=1,
             retries=1, redirect='false')
-    getDigits.addSpeak("Press 1 to transfer this call")
-    r.add(getDigits)
+    get_digits.addSpeak("Press 1 to transfer this call")
+    r.add(get_digits)
     params = {
         'length' : "10" # Time to wait in seconds
     }
@@ -73,11 +77,9 @@ def transfer():
 def transfer_action():
     digit = request.args.get('Digits')
     call_uuid = request.args.get('CallUUID')
-    auth_id = "MAMZAYOTJJMDM3NDQ2OT"
-    auth_token = "ODE1ZmJkNzI3MzIwMmNmMDBiMDFiNjkxMDhlMjZj"
     print ("Call UUID is : %s") % (call_uuid)
     print ("Digit pressed is : %s")  % (digit)
-    p = plivo.RestAPI(auth_id, auth_token)
+    p = plivo.RestAPI(PLIVO_AUTH_ID, PLIVO_AUTH_TOKEN)
     if digit == "1":
         params = {
             'call_uuid' : call_uuid, # ID of the call
@@ -88,19 +90,20 @@ def transfer_action():
     else :
         print ("Wrong Input")
         print (str(response))
-        return Response(str(response), mimetype='text/plain')
+
+    return Response(str(response), mimetype='text/plain')
 
 
 @app.route('/ivr/start', methods=['POST', 'GET'])
 def ivr_start():
     r = plivoxml.Response()
     getdigits_action_url = url_for('ivr_next', _external=True)
-    getDigits = plivoxml.GetDigits(action=getdigits_action_url,
+    get_digits = plivoxml.GetDigits(action=getdigits_action_url,
             method='GET', timeout=7, numDigits=1,
-            retries=1, redirect='true')
+            retries=2, redirect='true')
 
-    getDigits.addSpeak("Welcome to Plivo Training IVR")
-    r.add(getDigits)
+    get_digits.addSpeak("Welcome to Plivo Training IVR")
+    r.add(get_digits)
     r.addSpeak("You haven't pressed any valid keys")
     print (r.to_xml())
     return Response(str(r), mimetype='text/xml')
@@ -115,10 +118,17 @@ def ivr_next():
     if digit == "1":
         # Read out a text.
         response.addSpeak("You pressed one")
-
     elif digit == "2":
-        # Listen to a song
-        response.addPlay("https://upload.wikimedia.org/wikipedia/commons/6/6a/04_%D0%B8%D0%BA%D0%BE%D1%81_1.oggvorbis.ogg")
+        # Patch to your one number
+        call_uuid = request.args.get('CallUUID')
+        print (call_uuid)
+        p = plivo.RestAPI(PLIVO_AUTH_ID, PLIVO_AUTH_TOKEN)
+        params = {
+            'call_uuid' : call_uuid, # ID of the call
+            'aleg_url' : "http://plivo-flask-training.herokuapp.com/forward", # URL to transfer for aleg
+            'aleg_method' : "GET" # ethod to invoke the aleg_url
+        }
+        response = p.transfer_call(params)
 
     else:
         response.addSpeak("I'm not angry with you, just disappointed!")
