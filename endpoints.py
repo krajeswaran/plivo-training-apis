@@ -97,7 +97,7 @@ def ivr_start():
     getdigits_action_url = url_for('ivr_next', _external=True)
     getDigits = plivoxml.GetDigits(action=getdigits_action_url,
             method='GET', timeout=7, numDigits=1,
-            retries=1, redirect='false')
+            retries=1, redirect='true')
 
     getDigits.addSpeak("Welcome to Plivo Training IVR")
     r.add(getDigits)
