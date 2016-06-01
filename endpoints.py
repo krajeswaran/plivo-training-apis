@@ -96,12 +96,12 @@ def ivr_start():
     r = plivoxml.Response()
     getdigits_action_url = url_for('ivr_next', _external=True)
     getDigits = plivoxml.GetDigits(action=getdigits_action_url,
-            method='GET', timeout=7, numDigits=1,
+            method='POST', timeout=7, numDigits=1,
             retries=1, redirect='false')
 
     getDigits.addSpeak("Welcome to Plivo Training IVR")
     r.add(getDigits)
-    r.addSpeak("You haven't pressed valid keys!")
+    r.addSpeak("You haven't pressed any valid keys")
     print (r.to_xml())
     return Response(str(r), mimetype='text/xml')
 
@@ -118,7 +118,7 @@ def ivr_next():
         # Listen to a song
         response.addPlay("https://upload.wikimedia.org/wikipedia/commons/6/6a/04_%D0%B8%D0%BA%D0%BE%D1%81_1.oggvorbis.ogg")
     else:
-        response.addSpeak(WRONG_INPUT_MESSAGE)
+        response.addSpeak("I'm not angry with you, just disappointed!")
 
     return Response(str(response), mimetype='text/xml')
 
