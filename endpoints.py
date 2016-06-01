@@ -40,7 +40,7 @@ def speak():
 def forward():
     r = plivoxml.Response()
     r.addSpeak("Thanks for calling Plivo training!. Your call is now being forwarded and recorded for lulz")
-    record_params = { 'action': 'http://requestb.in/15j1zi21', 'startDialOnAnswer' : 'true', 'redirect': 'false' }
+    record_params = { 'action': 'http://requestb.in/15j1zi21', 'startOnDialAnswer' : 'true', 'redirect': 'false' }
     r.addRecord(**record_params)
     forwardNumber = "919952899700"
     r.addDial().addNumber(forwardNumber)
