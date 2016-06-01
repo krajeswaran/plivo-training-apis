@@ -101,7 +101,7 @@ def ivr_start():
 
     getDigits.addSpeak("Welcome to Plivo Training IVR")
     r.add(getDigits)
-    r.addSpeak("You haven't pressed valid keys!")
+    r.addSpeak("You haven't pressed any valid keys")
     print (r.to_xml())
     return Response(str(r), mimetype='text/xml')
 
@@ -118,7 +118,7 @@ def ivr_next():
         # Listen to a song
         response.addPlay("https://upload.wikimedia.org/wikipedia/commons/6/6a/04_%D0%B8%D0%BA%D0%BE%D1%81_1.oggvorbis.ogg")
     else:
-        response.addSpeak(WRONG_INPUT_MESSAGE)
+        response.addSpeak("I'm not angry with you, just disappointed!")
 
     return Response(str(response), mimetype='text/xml')
 
