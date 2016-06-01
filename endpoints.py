@@ -101,7 +101,7 @@ def ivr_start():
 
     getDigits.addSpeak("Welcome to Plivo Training IVR")
     r.add(getDigits)
-    r.add("You haven't pressed valid keys!")
+    r.addSpeak("You haven't pressed valid keys!")
     print (r.to_xml())
     return Response(str(r), mimetype='text/xml')
 
