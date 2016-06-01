@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, url_for
 import plivoxml, plivo
 
 app = Flask(__name__)
@@ -66,8 +66,7 @@ def transfer():
     }
     r.addWait(**params)
     print (r.to_xml())
-    return Response(str(response), mimetype='text/xml')
-
+    return Response(str(r), mimetype='text/xml')
 
 
 @app.route('/transfer_action/', methods=['POST', 'GET'])
@@ -90,6 +89,38 @@ def transfer_action():
         print ("Wrong Input")
         print (str(response))
         return Response(str(response), mimetype='text/plain')
+
+
+@app.route('/ivr/start', methods=['POST', 'GET'])
+def ivr_start():
+    r = plivoxml.Response()
+    getdigits_action_url = url_for('ivr/next', _external=True)
+    getDigits = plivoxml.GetDigits(action=getdigits_action_url,
+            method='GET', timeout=7, numDigits=1,
+            retries=1, redirect='false')
+
+    getDigits.addSpeak("Welcome to Plivo Training IVR")
+    r.add(getDigits)
+    r.add("You haven't pressed valid keys!")
+    print (r.to_xml())
+    return Response(str(r), mimetype='text/xml')
+
+
+
+@app.route('/ivr/next', methods=['POST', 'GET'])
+def ivr_next():
+    response = plivoxml.Response()
+    digit = request.form.get('Digits')
+    if digit == "1":
+        # Read out a text.
+        response.addSpeak("You pressed one")
+    elif digit == "2":
+        # Listen to a song
+        response.addPlay("https://upload.wikimedia.org/wikipedia/commons/6/6a/04_%D0%B8%D0%BA%D0%BE%D1%81_1.oggvorbis.ogg")
+    else:
+        response.addSpeak(WRONG_INPUT_MESSAGE)
+
+    return Response(str(response), mimetype='text/xml')
 
 
 
