@@ -109,7 +109,6 @@ def ivr_start():
     return Response(str(r), mimetype='text/xml')
 
 
-
 @app.route('/ivr/next', methods=['POST', 'GET'])
 def ivr_next():
     response = plivoxml.Response()
@@ -122,14 +121,9 @@ def ivr_next():
         # Patch to your one number
         call_uuid = request.args.get('CallUUID')
         print (call_uuid)
-        p = plivo.RestAPI(PLIVO_AUTH_ID, PLIVO_AUTH_TOKEN)
-        params = {
-            'call_uuid' : call_uuid, # ID of the call
-            'aleg_url' : "http://plivo-flask-training.herokuapp.com/forward", # URL to transfer for aleg
-            'aleg_method' : "GET" # ethod to invoke the aleg_url
-        }
-        response = p.transfer_call(params)
-
+        response.addSpeak("You are now being patched..")
+        forwardNumber = "919952899700"
+        response.addDial().addNumber(forwardNumber)
     else:
         response.addSpeak("I'm not angry with you, just disappointed!")
 
