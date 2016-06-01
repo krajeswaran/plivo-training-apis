@@ -102,9 +102,9 @@ def ivr_start():
             method='GET', timeout=7, numDigits=1,
             retries=2, redirect='true')
 
-    get_digits.addSpeak("Welcome to Plivo Training IVR")
+    get_digits.addSpeak("Welcome to Plivo Training IVR. Press a digit to continue")
     r.add(get_digits)
-    r.addSpeak("You haven't pressed any valid keys")
+    r.addSpeak("You haven't pressed any valid key")
     print (r.to_xml())
     return Response(str(r), mimetype='text/xml')
 
@@ -121,7 +121,7 @@ def ivr_next():
         # Patch to one number
         response.addSpeak("You are now being patched..")
         forwardNumber = "919952899700"
-        params = { 'dialMusic': 'real' }
+        params = { 'dialMusic': 'Real' }
         response.addDial(**params).addNumber(forwardNumber)
     elif digit == "3":
         # call record
