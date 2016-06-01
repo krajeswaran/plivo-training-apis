@@ -39,7 +39,9 @@ def speak():
 @app.route('/forward', methods=['POST', 'GET'])
 def forward():
     r = plivoxml.Response()
-    r.addSpeak("Thanks for calling Plivo training!. Your call is now being forwarded")
+    r.addSpeak("Thanks for calling Plivo training!. Your call is now being forwarded and recorded for lulz")
+    record_params = { 'action': 'http://requestb.in/15j1zi21', 'startDialOnAnswer' : 'true', 'redirect': 'false' }
+    r.addRecord(**record_params)
     forwardNumber = "919952899700"
     r.addDial().addNumber(forwardNumber)
     print (r.to_xml())
@@ -80,10 +82,11 @@ def transfer_action():
     print ("Call UUID is : %s") % (call_uuid)
     print ("Digit pressed is : %s")  % (digit)
     p = plivo.RestAPI(PLIVO_AUTH_ID, PLIVO_AUTH_TOKEN)
+    forward_url = url_for('forward', _external=True)
     if digit == "1":
         params = {
             'call_uuid' : call_uuid, # ID of the call
-            'aleg_url' : "http://plivo-flask-training.herokuapp.com/forward", # URL to transfer for aleg
+            'aleg_url' : forward_url, # URL to transfer for aleg
             'aleg_method' : "GET" # ethod to invoke the aleg_url
         }
         response = p.transfer_call(params)
