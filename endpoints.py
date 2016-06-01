@@ -94,7 +94,7 @@ def transfer_action():
 @app.route('/ivr/start', methods=['POST', 'GET'])
 def ivr_start():
     r = plivoxml.Response()
-    getdigits_action_url = url_for('ivr/next', _external=True)
+    getdigits_action_url = url_for('ivr_next', _external=True)
     getDigits = plivoxml.GetDigits(action=getdigits_action_url,
             method='GET', timeout=7, numDigits=1,
             retries=1, redirect='false')
