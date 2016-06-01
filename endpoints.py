@@ -41,8 +41,7 @@ def forward():
     r = plivoxml.Response()
     r.addSpeak("Thanks for calling Plivo training!. Your call is now being forwarded")
     forwardNumber = "919952899700"
-    params = { 'dialMusic': 'real' }
-    r.addDial(**params).addNumber(forwardNumber)
+    r.addDial().addNumber(forwardNumber)
     print (r.to_xml())
     return Response(str(r), mimetype='text/xml')
 
@@ -122,7 +121,8 @@ def ivr_next():
         # Patch to one number
         response.addSpeak("You are now being patched..")
         forwardNumber = "919952899700"
-        response.addDial().addNumber(forwardNumber)
+        params = { 'dialMusic': 'real' }
+        response.addDial(**params).addNumber(forwardNumber)
     elif digit == "3":
         # call record
         response.addSpeak("Talk to the hand.")
